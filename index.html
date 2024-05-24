@@ -41,6 +41,10 @@
                         name="imageURL"                         
                         required>
                 </div>
+                <div>
+                    <p id="errorMessage" class="text-2xl text-red-500"></p>
+                </div>
+
                 <div class="flex justify-center">
                     <input id="create-btn" class="btn border-t-cyan-300 bg-blue-400 cursor-pointer hover:bg-blue-600" type="button" value="Create Product"/>
                 </div>
@@ -55,13 +59,17 @@
                 </div>
             </div>
     
-            <!-- <div class="flex justify-center">
-                <input class="hidden btn bg-green-500 cursor-pointer hover:bg-green-600" type="submit" value="Add-to-cart"/>
+            <div id="addToCard" class="flex justify-center">
+                <input class="btn bg-green-300 cursor-pointer hover:bg-green-600 mt-10" type="submit" value="Add-to-cart"/>
             </div>
             
-            <div class="flex justify-center">
-                <input class="hidden btn bg-red-200 cursor-pointer hover:bg-red-400" type="submit" value="Calculate final price"/>
-            </div> -->
+            <div id="add-cart" class="mt-6 container mx-auto bg-slate-400">
+                <div class="rounded shadow-md px-16 py-16">
+                    <ul id="product-list" class="list-none p-0">
+                        <!-- Display Product here -->
+                    </ul> 
+                </div>
+            </div>
         </div>
     </div>
 
