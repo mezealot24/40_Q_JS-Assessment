@@ -1,32 +1,47 @@
 document.addEventListener("DOMContentLoaded", () => {
     const productInput = document.getElementById("product-name");
-    const addProductBtn = document.getElementById("create-btn");
     const priceInput = document.getElementById("price");
     const imageURL = document.getElementById("imageURL");
+    const createBtn = document.getElementById("create-btn");
     const productList = document.getElementById("product-list");
     const errorMessage = document.getElementById("errorMessage");
-    
+    const addCartBtn = document.getElementById("add-cart");
+    const cartList = document.getElementById("cart-list");
+    const calculatePriceBtn = document.getElementById("calculate-price");
+    const finalPriceDiv = document.getElementById("final-price");
 
     let dashboard = [];
+    let cart = [];
 
-    addProductBtn.addEventListener("click", (e) => {
+    createBtn.addEventListener("click", (e) => {
         e.preventDefault();
+        errorMessage.innerHTML = "";
 
         const productText = productInput.value.trim();
         const productPrice = priceInput.value.trim();
         const productImage = imageURL.value.trim();
 
+        if (!productText || !productPrice || !productImage) {
+            errorMessage.innerHTML = `<p class="errorMessage">All fields are required.</p>`;
+            return;
+        }
 
-        if (!isImgUrl(productImage)) {            
-            errorMessage.innerHTML = `<p class="errorMessage">Please enter a valid image URL.</p>`;  
-            return;          
+        if (isNaN(productPrice)) {
+            errorMessage.innerHTML = `<p class="errorMessage">Price must be a number.</p>`;
+            return;
+        }
+
+        if (!isImgUrl(productImage)) {
+            errorMessage.innerHTML = `<p class="errorMessage">Please enter a valid image URL.</p>`;
+            return;
         }
 
         const productObject = {
             id: Date.now(),
-            text: productText, 
-            price: productPrice,
-            image: productImage  
+            name: productText,
+            price: parseFloat(productPrice),
+            image: productImage,
+            selected: false
         };
 
         dashboard.push(productObject);
@@ -35,59 +50,77 @@ document.addEventListener("DOMContentLoaded", () => {
         productInput.value = "";
         priceInput.value = "";
         imageURL.value = "";
-        
     });
 
-    function renderDashboard(dashboardToRender) {
+    function renderDashboard(products) {
         productList.innerHTML = "";
-        dashboardToRender.forEach((productObject) => {
-            const dashboardAdd = document.createElement("li");
-            dashboardAdd.className = "flex justify-between items-center bg-gray-200 px-4 py-2 mb-2 rounded text-pretty hover:ring-1 hover:ring-violet-700 hover:ring-offset-2";
-            dashboardAdd.innerHTML = "";
-
-            const productCard = document.createElement("div");
-            productCard.className = "flex items-center";
-            productCard.innerHTML = `
-                <img src="${productObject.image}" class="w-16 h-16 mr-4">
-                <div>
-                    <h3 class="text-xl font-semibold">${productObject.text}</h3>
-                    <p class="text-gray-600">${productObject.price}</p>                    
+        products.forEach(product => {
+            const productItem = document.createElement("li");
+            productItem.className = "product-card";
+            productItem.innerHTML = `
+                <div class="product-info">
+                    <input type="checkbox" class="product-checkbox" data-id="${product.id}" ${product.selected ? "checked" : ""}>
+                    <img src="${product.image}" alt="${product.name}">
+                    <div>
+                        <h3>${product.name}</h3>
+                        <p>${product.price.toFixed(2)}</p>
+                    </div>
                 </div>
             `;
-
-            const checkBox = document.createElement("input");
-            checkBox.type = "checkbox";
-            dashboardAdd.appendChild(checkBox);
-            dashboardAdd.appendChild(productCard);
-
-            productList.appendChild(dashboardAdd);
-
-
+            productList.appendChild(productItem);
         });
+        updateCartButton();
+    }
+
+    productList.addEventListener("change", (e) => {
+        if (e.target.classList.contains("product-checkbox")) {
+            const productId = e.target.getAttribute("data-id");
+            const product = dashboard.find(p => p.id == productId);
+            if (product) {
+                product.selected = e.target.checked;
+            }
+            updateCartButton();
+        }
+    });
+
+    addCartBtn.addEventListener("click", () => {
+        cart = dashboard.filter(product => product.selected);
+        renderCart(cart);
+        updateCartButton();
+    });
+
+    function renderCart(cartItems) {
+        cartList.innerHTML = "";
+        cartItems.forEach(item => {
+            const cartItem = document.createElement("li");
+            cartItem.className = "product-card";
+            cartItem.innerHTML = `
+                <div class="product-info">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div>
+                        <h3>${item.name}</h3>
+                        <p>${item.price.toFixed(2)}</p>
+                    </div>
+                </div>
+            `;
+            cartList.appendChild(cartItem);
+        });
+
+        calculatePriceBtn.style.display = cartItems.length ? "block" : "none";
+    }
+
+    calculatePriceBtn.addEventListener("click", () => {
+        const totalPrice = cart.reduce((total, product) => total + product.price, 0);
+        finalPriceDiv.innerHTML = `<p>Total Price: $${totalPrice.toFixed(2)}</p>`;
+    });
+
+    function updateCartButton() {
+        const selectedCount = dashboard.filter(product => product.selected).length;
+        addCartBtn.textContent = `Add to Cart (${selectedCount})`;
+    }
+
+    function isImgUrl(url) {
+        const pattern = /\.(jpg|jpeg|png|gif)$/i;
+        return pattern.test(url);
     }
 });
-
-/* function toggleLike(event) {
-	const checkbox = event.target;
-	const uploadId = parseInt(checkbox.getAttribute("data-id"));
-	const upload = ip.find((upload) => upload.id === uploadId);
-
-	if (upload) {
-		upload.likes = checkbox.checked;
-		updateLikeCounter();
-	}
-} */
-
-
-
-
-
-
-
-
-
-function isImgUrl(images) {
-    const input = new URL(images);
-    return /\.(jpg|jpeg|gif|png)$/.test(input.pathname);
-}
-

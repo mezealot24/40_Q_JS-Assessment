@@ -2,77 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <title>40_Q_JS-Assessment</title>
 </head>
 <body>
-    <div class="container mx-auto p-4">
-        <section class="hero text-center py-4">
-            <h1 class="text-3xl font-bold mb-2">Shopping Cart</h1>
-        </section>
-    
-        <div class="mt-6 p-6">
-            <h2 class="text-2xl mb-4">Add item for selection</h2>
-            <form id="form" class="space-y-4">
-                <div class="flex flex-col">
-                    <label for="product-name" class="mb-2 font-semibold">Product name:</label>
-                    <input class="input input-bordered input-sm p-2" 
-                        type="text" 
-                        id="product-name" 
-                        name="product-name" 
-                        required>
-                </div>
-                <div class="flex flex-col">
-                    <label for="price" class="mb-2 font-semibold">Price:</label>
-                    <input class="input input-bordered input-sm p-2" 
-                        type="number" 
-                        id="price" 
-                        name="price" 
-                        min="1" max="9999" 
-                        required>
-                </div>
-                <div class="flex flex-col">
-                    <label for="imageFile" class="mb-2 font-semibold">Image URL:</label>
-                    <input class="input input-bordered input-sm p-2" 
-                        type="url"	
-                        id="imageURL"
-                        name="imageURL"                         
-                        required>
-                </div>
-                <div>
-                    <p id="errorMessage" class="text-2xl text-red-500"></p>
-                </div>
-
-                <div class="flex justify-center">
-                    <input id="create-btn" class="btn border-t-cyan-300 bg-blue-400 cursor-pointer hover:bg-blue-600" type="button" value="Create Product"/>
-                </div>
-            </form>
-            
-    
-            <div id="display-product" class="mt-6 container mx-auto bg-slate-400">
-                <div class="rounded shadow-md px-16 py-16">
-                    <ul id="product-list" class="list-none p-0">
-                        <!-- Display Product here -->
-                    </ul> 
-                </div>
-            </div>
-    
-            <div id="addToCard" class="flex justify-center">
-                <input class="btn bg-green-300 cursor-pointer hover:bg-green-600 mt-10" type="submit" value="Add-to-cart"/>
-            </div>
-            
-            <div id="add-cart" class="mt-6 container mx-auto bg-slate-400">
-                <div class="rounded shadow-md px-16 py-16">
-                    <ul id="product-list" class="list-none p-0">
-                        <!-- Display Product here -->
-                    </ul> 
-                </div>
-            </div>
+    <h1 class="text-center text-3xl font-bold">Shopping Cart</h1>
+    <div class="container mx-auto flex flex-col justify-center items-center gap-5">
+    <div class="flex flex-col bg-slate-200">
+        <div class="flex flex-col my-3">
+        <label for="product-name">Product Name</label>        
+        <input class="outline outline-2 my-2" type="text" id="product-name" placeholder="Product Name">
         </div>
+
+        <div class="flex flex-col my-3">
+        <label for="Price">Price</label>
+        <input class="outline outline-2 my-2" type="text" id="price" placeholder="Price">
+        </div>
+
+        <div class="flex flex-col my-3"></div>
+        <label for="product-name">Image URL</label>
+        <input class="outline outline-2 my-2" type="Image URL" id="imageURL" placeholder="Image URL">
+        </div>
+
+        <div class="w-full flex justify-center">
+        <button id="create-btn" class="bg-green-300 hover:bg-green-600 w-[50%] justify-center">Create Product</button>
+        </div>
+        <div id="errorMessage"></div>
     </div>
 
-    <script src="/scripts.js"></script>
-</body>
+    <div class="flex flex-col">
+        <h2 class="flex justify-center content-center text-3xl font-semibold">Product Dashboard</h2>
+        <ul id="product-list"></ul>
+    
+        <button class="flex bg-orange-300 hover:bg-orange-500 w-[50%] justify-center" id="add-cart">Add to Cart (0)</button>
+   
+        <h2 class="text-center">Cart</h2>
+        <ul id="cart-list"></ul>
+        <button class="flex bg-purple-300 hover:bg-purple-500 w-[50%] justify-center"" id="calculate-price" style="display:none;">Calculate Final Price</button>
+        <div id="final-price"></div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body> 
 </html>
